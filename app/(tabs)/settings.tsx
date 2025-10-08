@@ -11,22 +11,12 @@ export default function SettingsScreen() {
   const { user, signOut } = useAuth();
   const router = useRouter();
 
-  const handleSignOut = () => {
-    Alert.alert(
-      'Sign Out',
-      'Are you sure you want to sign out?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Sign Out',
-          style: 'destructive',
-          onPress: async () => {
-            await signOut();
-            router.replace('/auth');
-          },
-        },
-      ]
-    );
+  const handleSignOut = async () => {
+    const confirmed = window.confirm('Are you sure you want to sign out?');
+    if (confirmed) {
+      await signOut();
+      router.replace('/auth');
+    }
   };
 
   return (
