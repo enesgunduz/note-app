@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 import DrawingPad from '@/components/notebook/DrawingPad';
-// Not ve Notebook arayüzleri (components/notebook/NoteCard.tsx ve NotesSection.tsx'ten alınmıştır)
+// Note and Notebook interfaces (taken from components/notebook/NoteCard.tsx and NotesSection.tsx)
 interface Note {
   id: string;
   title: string;
@@ -59,7 +59,7 @@ const NoteDetailScreen = () => {
     fetchNote();
   }, [notebookId, noteId]);
 
-  // Not başlığı veya içeriği değiştiğinde Firestore'a kaydet
+  // Save to Firestore when note title or content changes
   useEffect(() => {
     if (!note || !notebookId || !noteId) return;
     if (title === note.title && content === note.content) return;
@@ -76,7 +76,7 @@ const NoteDetailScreen = () => {
           await updateDoc(notebookRef, { notes });
         }
       } catch (e) {
-        Alert.alert('Hata', 'Not kaydedilemedi');
+        Alert.alert('Error', 'Note could not be saved');
       }
       setSaving(false);
     }, 700);
@@ -95,10 +95,10 @@ const NoteDetailScreen = () => {
           n.id === noteId ? { ...n, drawing, lastModified: new Date() } : n
         );
         await updateDoc(notebookRef, { notes });
-        Alert.alert('Başarılı', 'Çizim kaydedildi!');
+        Alert.alert('Success', 'Drawing saved!');
       }
     } catch (e) {
-      Alert.alert('Hata', 'Çizim kaydedilemedi');
+      Alert.alert('Error', 'Drawing could not be saved');
     }
     setDrawingSaving(false);
   };
@@ -106,7 +106,7 @@ const NoteDetailScreen = () => {
   if (loading) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Yükleniyor...</Text>
+        <Text style={styles.title}>Loading...</Text>
       </View>
     );
   }
@@ -114,14 +114,14 @@ const NoteDetailScreen = () => {
   if (!note) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Not bulunamadı</Text>
+        <Text style={styles.title}>Note not found</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      {/* Sağ üstte çizim ekle ikonu */}
+      {/* Drawing icon in top right */}
       <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 8 }}>
         <TouchableOpacity onPress={() => setShowDrawing((v) => !v)} style={{ backgroundColor: '#F1F5F9', padding: 8, borderRadius: 8 }}>
           <Pencil size={20} color="#2563EB" />
@@ -131,33 +131,33 @@ const NoteDetailScreen = () => {
         style={styles.title}
         value={title}
         onChangeText={setTitle}
-        placeholder="Not başlığı"
+        placeholder="Note title"
         editable={!loading}
       />
       <TextInput
         style={styles.content}
         value={content}
         onChangeText={setContent}
-        placeholder="Not içeriği"
+        placeholder="Note content"
         multiline
         editable={!loading}
       />
-      {/* Inline DrawingPad, küçük canvas ve kaydet butonu */}
+      {/* Inline DrawingPad, small canvas and save button */}
       {showDrawing && (
         <View style={{ marginTop: 8, marginBottom: 8, alignItems: 'center', backgroundColor: '#FFF', borderRadius: 12, padding: 8, elevation: 2 }}>
           <DrawingPad value={drawing} onChange={setDrawing} widthOverride={240} heightOverride={140} />
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: 240, alignSelf: 'center', marginTop: 4 }}>
             <TouchableOpacity onPress={() => setShowDrawing(false)} style={{ backgroundColor: '#F1F5F9', padding: 8, borderRadius: 8, marginRight: 8 }}>
-              <Text style={{ color: '#EF4444', fontWeight: 'bold' }}>Kapat</Text>
+              <Text style={{ color: '#EF4444', fontWeight: 'bold' }}>Close</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleDrawingSave} style={{ backgroundColor: '#DCFCE7', padding: 8, borderRadius: 8 }} disabled={drawingSaving}>
               <Check size={20} color="#059669" />
             </TouchableOpacity>
           </View>
-          {drawingSaving && <Text style={styles.saving}>Çizim kaydediliyor...</Text>}
+          {drawingSaving && <Text style={styles.saving}>Saving drawing...</Text>}
         </View>
       )}
-      {saving && <Text style={styles.saving}>Kaydediliyor...</Text>}
+      {saving && <Text style={styles.saving}>Saving...</Text>}
     </View>
   );
 };
@@ -189,5 +189,5 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     textAlign: 'left',
   },
-  // drawingPadWrapper ve saveButton kaldırıldı
+  // drawingPadWrapper and saveButton removed
 });

@@ -36,7 +36,7 @@ const NoteCard: FC<NoteCardProps> = ({ note, onUpdate, onDelete, notebookId }) =
     setLocalContent(note.content);
   }, [note.id]);
 
-  // Sadece drawing değiştiğinde localDrawing güncellensin
+  // Update localDrawing only when drawing changes
   useEffect(() => {
     setLocalDrawing(note.drawing || '');
   }, [note.drawing]);
@@ -97,7 +97,7 @@ const NoteCard: FC<NoteCardProps> = ({ note, onUpdate, onDelete, notebookId }) =
           <X size={16} color="#EF4444" />
         </TouchableOpacity>
       </View>
-      {/* Sadece başlık gösterilecek, içerik, çizim ve timestamp gizli */}
+      {/* Only title will be shown, content, drawing and timestamp hidden */}
     </TouchableOpacity>
   );
 };

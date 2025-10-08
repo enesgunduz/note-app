@@ -234,7 +234,7 @@ export default function NotebookScreen() {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end', padding: 12 }}>
             <TouchableOpacity onPress={() => setShowCanvas(false)} style={{ backgroundColor: '#F1F5F9', padding: 8, borderRadius: 8 }}>
-              <Text style={{ color: '#EF4444', fontWeight: 'bold' }}>Kapat</Text>
+              <Text style={{ color: '#EF4444', fontWeight: 'bold' }}>Close</Text>
             </TouchableOpacity>
           </View>
           <DrawingPad />
