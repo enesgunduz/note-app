@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, SafeAreaView, Alert, Modal, View, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, SafeAreaView, Alert, View } from 'react-native';
 import { Text } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { doc, getDoc, updateDoc, onSnapshot, arrayUnion, arrayRemove } from 'firebase/firestore';
@@ -9,9 +9,7 @@ import NavigationHeader from '@/components/notebook/NavigationHeader';
 import NotebookHeader from '@/components/notebook/NotebookHeader';
 import NotesSection from '@/components/notebook/NotesSection';
 import ShareModal from '@/components/notebook/ShareModal';
-import DrawingPad from '@/components/notebook/DrawingPad';
 import { LoadingScreen, ErrorScreen } from '@/components/notebook/ScreenStates';
-import { PlusCircle } from 'lucide-react-native';
 
 interface Note {
   id: string;
@@ -39,7 +37,7 @@ interface Friend {
   photoURL?: string;
 }
 
-export default function NotebookScreen() {
+const NotebookScreen = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { user } = useAuth();
@@ -47,7 +45,7 @@ export default function NotebookScreen() {
   const [loading, setLoading] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
   const [friends, setFriends] = useState<Friend[]>([]);
-  const [showCanvas, setShowCanvas] = useState(false);
+  
 
   useEffect(() => {
     if (!id || !user) return;
@@ -222,25 +220,6 @@ export default function NotebookScreen() {
         onShare={() => setShowShareModal(true)}
       />
 
-      {/* Canvas açma butonu */}
-      <View style={{ alignItems: 'flex-end', margin: 12 }}>
-        <TouchableOpacity onPress={() => setShowCanvas(true)} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#F1F5F9', padding: 8, borderRadius: 8 }}>
-          <PlusCircle size={20} color="#2563EB" />
-          <Text style={{ marginLeft: 6, color: '#2563EB', fontWeight: 'bold' }}>Çizim Ekle</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Modal visible={showCanvas} animationType="slide" onRequestClose={() => setShowCanvas(false)}>
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#FFF' }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', padding: 12 }}>
-            <TouchableOpacity onPress={() => setShowCanvas(false)} style={{ backgroundColor: '#F1F5F9', padding: 8, borderRadius: 8 }}>
-              <Text style={{ color: '#EF4444', fontWeight: 'bold' }}>Kapat</Text>
-            </TouchableOpacity>
-          </View>
-          <DrawingPad />
-        </SafeAreaView>
-      </Modal>
-
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <NotebookHeader
           title={notebook.title}
@@ -269,7 +248,8 @@ export default function NotebookScreen() {
       />
     </SafeAreaView>
   );
-}
+};
+export default NotebookScreen;
 
 const styles = StyleSheet.create({
   container: {

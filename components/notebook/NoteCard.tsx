@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { X, Pencil } from 'lucide-react-native';
-import DrawingPad from './DrawingPad';
+import { X } from 'lucide-react-native';
 import type { FC } from 'react';
 
 interface Note {
@@ -25,10 +24,8 @@ const NoteCard: FC<NoteCardProps> = ({ note, onUpdate, onDelete, notebookId }) =
   const router = useRouter();
   const [localTitle, setLocalTitle] = useState(note.title);
   const [localContent, setLocalContent] = useState(note.content);
-  const [localDrawing, setLocalDrawing] = useState(note.drawing || '');
   const titleTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const contentTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const drawingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Update local state when note prop changes (from external updates)
   useEffect(() => {
@@ -36,10 +33,7 @@ const NoteCard: FC<NoteCardProps> = ({ note, onUpdate, onDelete, notebookId }) =
     setLocalContent(note.content);
   }, [note.id]);
 
-  // Sadece drawing değiştiğinde localDrawing güncellensin
-  useEffect(() => {
-    setLocalDrawing(note.drawing || '');
-  }, [note.drawing]);
+  // çizim özelliği kaldırıldı
 
   const handleTitleChange = (text: string) => {
     setLocalTitle(text);
@@ -61,15 +55,7 @@ const NoteCard: FC<NoteCardProps> = ({ note, onUpdate, onDelete, notebookId }) =
     }, 500);
   };
 
-  const handleDrawingChange = (drawing: string) => {
-    setLocalDrawing(drawing);
-    if (drawingTimeoutRef.current) {
-      clearTimeout(drawingTimeoutRef.current);
-    }
-    drawingTimeoutRef.current = setTimeout(() => {
-      onUpdate(note.id, { drawing });
-    }, 500);
-  };
+  // çizim özelliği kaldırıldı
 
   // Cleanup timeouts on unmount
   useEffect(() => {
@@ -80,9 +66,7 @@ const NoteCard: FC<NoteCardProps> = ({ note, onUpdate, onDelete, notebookId }) =
       if (contentTimeoutRef.current) {
         clearTimeout(contentTimeoutRef.current);
       }
-      if (drawingTimeoutRef.current) {
-        clearTimeout(drawingTimeoutRef.current);
-      }
+      // drawing timeouts removed
     };
   }, []);
 
